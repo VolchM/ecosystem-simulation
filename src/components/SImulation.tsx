@@ -5,7 +5,10 @@ import Vector2 from '../simulation/Vector2.tsx';
 import AnimalSpecie, { AnimalDiet } from "../simulation/AnimalSpecie.tsx";
 import Animal from "../simulation/Animal.tsx";
 import { randomRange } from "../Utils.tsx";
+import SimulationParams from "./SimulationParams.tsx";
+import SimulationControls from "./SimulationControls.tsx";
 import "./Simulation.css";
+
 
 function createField(width: number, height: number): SimulationField {
     const herbivoreSpecie = new AnimalSpecie({
@@ -47,11 +50,20 @@ function createField(width: number, height: number): SimulationField {
     return field;
 }
 
-export default function Simulation({ targetFPS }: { targetFPS: number }): React.JSX.Element {
-    const [simulationField,] = useState(createField(1500, 1000));
+type SimulationProps = {
+    targetFPS: number,
+}
+
+export default function Simulation({ targetFPS }: SimulationProps): React.JSX.Element {
+    const width = 1500, height = 1000;
+    const [simulationField, setField] = useState(createField(width, height));
+    const [paused, setPaused] = useState(false);
+    const [speed, setSpeed] = useState(1.0);
     const [,redrawField] = useReducer((tick) => tick + 1, 0);
 
     useEffect(() => {
+        if (paused) return;
+
         const targetFrameLength = 1 / targetFPS;
 
         let requestID = requestAnimationFrame(step);
@@ -68,10 +80,10 @@ export default function Simulation({ targetFPS }: { targetFPS: number }): React.
             if (deltaTime >= targetFrameLength - 0.0003) {
                 lastTimestamp = timestamp;
                 if (deltaTime <= 0.2) {
-                    simulationField.update(deltaTime);
+                    simulationField.update(deltaTime * speed);
                 } else {
                     // Окно не было активным
-                    simulationField.update(targetFrameLength);
+                    simulationField.update(targetFrameLength * speed);
                 }
                 redrawField();
             }
@@ -79,11 +91,22 @@ export default function Simulation({ targetFPS }: { targetFPS: number }): React.
         }
 
         return () => cancelAnimationFrame(requestID);
-    }, [simulationField, targetFPS]);
+    }, [simulationField, targetFPS, paused, speed]);
     
     return (
-        <svg width={simulationField.width} height={simulationField.height} viewBox={`0 0 ${simulationField.width} ${simulationField.height}`}>
-            {simulationField.renderObjects()}
-        </svg>
+        <div className="simulation">
+            <SimulationParams />
+            <div className="container field-container">
+                <svg className="field" width={simulationField.width} height={simulationField.height} viewBox={`0 0 ${simulationField.width} ${simulationField.height}`}>
+                    {simulationField.renderObjects()}
+                </svg>
+            </div>
+            <div className="container simulation-info">
+                <SimulationControls paused={paused} onPausedChange={setPaused}
+                                    onReset={() => setField(createField(width, height))}
+                                    speed={speed} onSpeedChange={setSpeed} />
+                <hr/>
+            </div>
+        </div>
     );
 }

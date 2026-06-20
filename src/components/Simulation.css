@@ -1,0 +1,27 @@
+.container {
+    background-color: var(--container-bg);
+    scrollbar-color: var(--scrollbar) var(--scrollbar-bg);
+    border: 2px solid var(--border);
+}
+
+.simulation {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.field-container {
+    overflow: auto;
+    max-height: 95vh;
+    line-height: 0;
+}
+
+.field {
+    background-color: var(--field-bg);
+    border: 2px dashed var(--border);
+    margin: 4px;
+}
+
+.simulation-info {
+    min-width: 300px;
+}

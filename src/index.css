@@ -1,3 +1,26 @@
+:root {
+    --text: #ffffff;
+    --bg: #101010;
+    --container-bg: #202020;
+    --field-bg: #202020;
+    --border: #808080;
+    --scrollbar: #808080;
+    --scrollbar-bg: #303030;
+}
+
 body {
-    background-color: #202020;
+    background-color: var(--bg);
+    font-family: sans-serif;
+    color: var(--text);
+}
+
+h2 {
+    text-align: center;
+    margin: 10px 0;
+}
+
+hr {
+    color: var(--border);
+    border-style: solid;
+    margin: 0;
 }

@@ -1,0 +1,51 @@
+.simulation-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .icon-button {
+        width: 35px;
+        height: 35px;
+        padding: 0;
+        border: none;
+        border-radius: 25%;
+        margin: 5px;
+    }
+
+    input {
+        margin-left: auto;
+        margin-right: 5px;
+    }
+
+    label {
+        margin-right: 5px;
+    }
+}
+
+.play-button {
+    background-color: #bbff67;
+}
+
+.play-button:hover {
+    background-color: #aae75f;
+}
+
+.pause-button {
+    background-color: #fd6e6e;
+}
+
+.pause-button:hover {
+    background-color: #e66565;
+}
+
+.reset-button {
+    background-color: #f33a3a;
+}
+
+.reset-button:hover {
+    background-color: #db3434;
+}
+
+.reset-button:active {
+    background-color: #b82c2c;
+}

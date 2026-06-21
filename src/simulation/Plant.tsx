@@ -16,7 +16,7 @@ export default class Plant extends SimulationObject {
 
     update(_deltaTime: number) {}
 
-    render() {
+    render(selectObject: (object: SimulationObject) => void) {
         return (
             <circle
                 key={this.id}
@@ -25,7 +25,7 @@ export default class Plant extends SimulationObject {
                 r={this.radius}
                 fill="#1a9e00"
                 cursor="pointer"
-                onClick={() => alert("Растение, ID: " + this.id.toString())}
+                onClick={() => selectObject(this)}
             />
         );
     }

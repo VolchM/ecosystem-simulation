@@ -73,7 +73,7 @@ export default class SimulationField {
         }
     }
 
-    renderObjects(): React.JSX.Element[] {
-        return [...this._plants.values(), ...this._animals.values()].map(obj => obj.render());
+    renderObjects(selectObject: (object: SimulationObject) => void): React.JSX.Element[] {
+        return [...this._plants.values(), ...this._animals.values()].map(obj => obj.render(selectObject));
     }
 }

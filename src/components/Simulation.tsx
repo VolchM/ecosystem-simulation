@@ -3,11 +3,13 @@ import SimulationField from "../simulation/SimulationField.tsx";
 import Plant from "../simulation/Plant.tsx";
 import Vector2 from '../simulation/Vector2.tsx';
 import AnimalSpecie, { AnimalDiet } from "../simulation/AnimalSpecie.tsx";
+import SimulationObject from "../simulation/SimulationObject.tsx";
 import Animal from "../simulation/Animal.tsx";
 import { randomRange } from "../Utils.tsx";
 import SimulationParams from "./SimulationParams.tsx";
 import SimulationControls from "./SimulationControls.tsx";
 import SimulationStats from "./SimulationStats.tsx";
+import ObjectInfo from "./ObjectInfo.tsx";
 import "./Simulation.css";
 
 
@@ -60,8 +62,23 @@ export default function Simulation({ targetFPS }: SimulationProps): React.JSX.El
     const [field, setField] = useState(createField(width, height));
     const [paused, setPaused] = useState(false);
     const [speed, setSpeed] = useState(1.0);
+    const [selectedObjectId, setSelectedObjectId] = useState<number | null>(null);
     const [,redrawField] = useReducer((tick) => tick + 1, 0);
 
+    function selectObject(object: SimulationObject) {
+        setSelectedObjectId(object.id);
+    }
+    function deselectObject() {
+        setSelectedObjectId(null);
+    }
+
+    let selectedObject: SimulationObject | null = null;
+    if (selectedObjectId !== null) {
+        selectedObject = field.getObjectById(selectedObjectId) ?? null;
+        if (selectedObject == null) setSelectedObjectId(null);
+    }
+
+    // Цикл обновления симуляции
     useEffect(() => {
         if (paused) return;
 
@@ -94,17 +111,28 @@ export default function Simulation({ targetFPS }: SimulationProps): React.JSX.El
         return () => cancelAnimationFrame(requestID);
     }, [field, targetFPS, paused, speed]);
     
+
     const speciesCount = field.species.map(curSpecie => ({
         specie: curSpecie,
         count: [...field.animals.values()].filter(animal => animal.specie === curSpecie).length
     }));
+
+    const selectedObjectGraphics: React.JSX.Element[] = [];
+    if (selectedObject !== null) {
+        selectedObjectGraphics.push(<circle key="outline" cx={selectedObject.pos.x} cy={selectedObject.pos.y} r={selectedObject.radius+3} fill="none" stroke="white" strokeWidth="2" />)
+        if (selectedObject instanceof Animal) {
+            selectedObjectGraphics.push(<circle key="vision-radius" cx={selectedObject.pos.x} cy={selectedObject.pos.y} r={selectedObject.specie.visionRadius} fill="none" stroke="#ffffff60" strokeWidth="2" strokeDasharray="10 20" />)
+        }
+    }
 
     return (
         <div className="simulation">
             <SimulationParams />
             <div className="container field-container">
                 <svg className="field" width={field.width} height={field.height} viewBox={`0 0 ${field.width} ${field.height}`}>
-                    {field.renderObjects()}
+                    <rect width="100%" height="100%" fill="transparent" onClick={deselectObject}/>
+                    {field.renderObjects(selectObject)}
+                    {selectedObjectGraphics}
                 </svg>
             </div>
             <div className="container simulation-info">
@@ -114,6 +142,7 @@ export default function Simulation({ targetFPS }: SimulationProps): React.JSX.El
                 <hr/>
                 <SimulationStats plantsCount={field.plants.size} speciesCount={speciesCount} />
                 <hr/>
+                <ObjectInfo object={selectedObject} />
             </div>
         </div>
     );

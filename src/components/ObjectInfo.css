@@ -1,0 +1,23 @@
+.select-object {
+    color: #acacac;
+    margin: 8px;
+    max-width: 280px;
+}
+
+.object-info div:first-child {
+    font-size: 1.2rem;
+    margin-top: 5px;
+
+    svg {
+        vertical-align: middle;
+    }
+}
+
+.object-stat {
+    font-size: 1.1rem;
+    margin: 5px;
+
+    span:nth-child(2) {
+        float: right;
+    }
+}

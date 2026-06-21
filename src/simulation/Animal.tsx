@@ -38,6 +38,7 @@ export default class Animal extends SimulationObject {
     get satiety() { return this._satiety; }
     get age() { return this._age; }
     get sex() { return this._sex; }
+    get reproductionTimer() { return this._reproductionTimer; }
 
     update(deltaTime: number) {
         this.animalBehaviour(deltaTime);
@@ -52,7 +53,7 @@ export default class Animal extends SimulationObject {
         }
 
         this._age += deltaTime;
-        this._reproductionTimer -= deltaTime;
+        this._reproductionTimer = Math.max(this._reproductionTimer - deltaTime, 0);
         this._stamina = clamp(this._stamina + (staminaRegeneration - staminaLoss) * deltaTime, 0, this._specie.maxStamina);
         this._satiety = clamp(this._satiety - satietyLoss * deltaTime, 0, this._specie.maxSatiety);
         if (this._satiety <= 0) {
@@ -68,7 +69,7 @@ export default class Animal extends SimulationObject {
         this.moveTo(newPos);
     }
 
-    render(): React.JSX.Element {
+    render(selectObject: (object: SimulationObject) => void): React.JSX.Element {
         return (
             <circle
                 key={this.id}
@@ -77,14 +78,7 @@ export default class Animal extends SimulationObject {
                 r={this._specie.radius}
                 fill={this._specie.color}
                 cursor="pointer"
-                onClick={() => alert(
-`${this._specie.diet == AnimalDiet.Herbivore ? "Травоядное" : "Плотоядное"} животное, ID: ${this.id.toString()}
-Пол: ${this._sex == Sex.Male ? "Мужской" : "Женский"}
-Время жизни: ${this._age.toFixed(2)}/${this._specie.maxAge} секунд
-Выносливость: ${this._stamina.toFixed(2)}/${this._specie.maxStamina}
-Сытость: ${this._satiety.toFixed(2)}/${this._specie.maxSatiety}
-${this.canReproduce() ? "Может размножаться" : "Не может размножаться"}`
-                )}
+                onClick={() => selectObject(this)}
             />
         );
     }

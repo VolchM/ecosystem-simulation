@@ -22,5 +22,5 @@ export default abstract class SimulationObject {
     }
 
     abstract update(deltaTime: number): void;
-    abstract render(): React.JSX.Element;
+    abstract render(selectObject: (object: SimulationObject) => void): React.JSX.Element;
 }

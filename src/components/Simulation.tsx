@@ -1,13 +1,10 @@
 import { useEffect, useReducer, useState } from "react";
 import SimulationField from "../simulation/SimulationField.tsx";
-import Plant from "../simulation/Plant.tsx";
-import Vector2 from '../simulation/Vector2.tsx';
 import AnimalSpecie, { AnimalDiet } from "../simulation/AnimalSpecie.tsx";
 import RandomizedStat from "../simulation/RandomizedStat.tsx";
 import PlantParams from "../simulation/PlantParams.tsx";
 import SimulationObject from "../simulation/SimulationObject.tsx";
 import Animal from "../simulation/Animal.tsx";
-import { randomRange } from "../Utils.tsx";
 import SimulationParams from "./SimulationParams.tsx";
 import SimulationControls from "./SimulationControls.tsx";
 import SimulationStats from "./SimulationStats.tsx";
@@ -28,6 +25,7 @@ function createField(width: number, height: number): SimulationField {
     const herbivoreSpecie = new AnimalSpecie({
         name: "Травоядное",
         diet: AnimalDiet.Herbivore,
+        startingCount: 60,
         inheritedStats: {
             maxSpeed: new RandomizedStat(50, 10),
             visionRadius: new RandomizedStat(90, 10),
@@ -45,6 +43,7 @@ function createField(width: number, height: number): SimulationField {
         name: "Плотоядное",
         diet: AnimalDiet.Carnivore,
         eats: ["Травоядное"],
+        startingCount: 18,
         inheritedStats: {
             maxSpeed: new RandomizedStat(75, 10),
             visionRadius: new RandomizedStat(90, 10),
@@ -58,21 +57,7 @@ function createField(width: number, height: number): SimulationField {
         radius: 9,
         color: "#e20000",
     });
-
-    const field = new SimulationField(width, height, plantParams, [herbivoreSpecie, carnivoreSpecie]);
-    for (let i = 0; i < plantParams.startingCount; i++) {
-        const stats = plantParams.randomStats();
-        field.addPlant(new Plant(field, Vector2.random(0, field.width, 0, field.height), plantParams, stats, randomRange(0, 0.75 * stats.oldAge)));
-    }
-    for (let i = 0; i < 60; i++) {
-        const stats = herbivoreSpecie.randomStats();
-        field.addAnimal(new Animal(field, Vector2.random(0, field.width, 0, field.height), herbivoreSpecie, stats, randomRange(0, 0.75 * stats.oldAge)));
-    }
-    for (let i = 0; i < 18; i++) {
-        const stats = carnivoreSpecie.randomStats();
-        field.addAnimal(new Animal(field, Vector2.random(0, field.width, 0, field.height), carnivoreSpecie, stats, randomRange(0, 0.75 * stats.oldAge)));
-    }
-    return field;
+    return new SimulationField(width, height, plantParams, [herbivoreSpecie, carnivoreSpecie]);;
 }
 
 type SimulationProps = {

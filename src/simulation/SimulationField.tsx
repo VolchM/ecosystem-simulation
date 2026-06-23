@@ -24,6 +24,17 @@ export default class SimulationField {
         this._species = species;
         this._plants = new Map<number, Plant>();
         this._animals = new Map<number, Animal>();
+
+        for (let i = 0; i < this._plantParams.startingCount; i++) {
+            const stats = this._plantParams.randomStats();
+            this.addPlant(new Plant(this, this.randomPos(), this._plantParams, stats, randomRange(0, 0.75 * stats.oldAge)));
+        }
+        for (const specie of species) {
+            for (let i = 0; i < specie.startingCount; i++) {
+                const stats = specie.randomStats();
+                this.addAnimal(new Animal(this, this.randomPos(), specie, stats, randomRange(0, 0.75 * stats.oldAge)));
+            }
+        }
     }
 
     get width() { return this._width; }
@@ -37,6 +48,10 @@ export default class SimulationField {
     getNextId(): number {
         this._lastId += 1;
         return this._lastId;
+    }
+
+    randomPos(): Vector2 {
+        return Vector2.random(0, this.width, 0, this.height);
     }
 
     getObjectById(id: number): SimulationObject | undefined {

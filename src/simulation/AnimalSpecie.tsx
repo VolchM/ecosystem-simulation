@@ -17,6 +17,7 @@ export default class AnimalSpecie {
     readonly name: string;
     readonly diet: AnimalDiet;
     readonly eats: string[];
+    readonly startingCount: number;
 
     readonly inheritedStats: InheritedStats;
     readonly mutationChance: number;
@@ -26,12 +27,13 @@ export default class AnimalSpecie {
     readonly color: string;
 
     constructor(args: { name: string, diet: AnimalDiet, eats?: string[],
-                        inheritedStats: InheritedStats,
+                        startingCount: number, inheritedStats: InheritedStats,
                         mutationChance: number, randomDeviation: number,
                         radius: number, color: string }) {
         this.name = args.name;
         this.diet = args.diet;
         this.eats = args.eats ?? [];
+        this.startingCount = args.startingCount;
         this.inheritedStats = args.inheritedStats;
         this.mutationChance = args.mutationChance;
         this.randomDeviation = args.randomDeviation;

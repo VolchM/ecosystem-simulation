@@ -156,7 +156,7 @@ export default function Simulation({ targetFPS }: { targetFPS: number }): React.
         }
 
         return () => cancelAnimationFrame(requestID);
-    }, [field, targetFPS, paused, speed]);
+    }, [field, targetFPS, paused, speed, simulationHistory]);
 
 
     let selectedObject: SimulationObject | null = null;

@@ -1,5 +1,5 @@
-# Симуляция естественного отбора
+# Симуляция экосистемы
 
-Запустить: https://volchm.github.io/natural-selection-simulation/
+Запустить: https://volchm.github.io/ecosystem-simulation/
 
 Выполнил: Волчков М. В. ПИ-43

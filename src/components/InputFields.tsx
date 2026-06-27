@@ -46,21 +46,21 @@ export type RandomizedStatInputRowProps = {
 
 export function RandomizedStatInputRow({ label, value, min, max, onChange }: RandomizedStatInputRowProps): React.JSX.Element {
     function setMean(mean: number) {
-        onChange(new RandomizedStat(mean, value.stdev));
+        onChange(new RandomizedStat(mean, value.maxdev));
     }
-    function setStdev(stdev: number) {
-        onChange(new RandomizedStat(value.mean, stdev));
+    function setMaxdev(maxdev: number) {
+        onChange(new RandomizedStat(value.mean, maxdev));
     }
 
-    let stdevMax: number | undefined = undefined;
+    let maxdevMax: number | undefined = undefined;
     if (min !== undefined) {
-        stdevMax = Math.floor((value.mean - min) / 3);
+        maxdevMax = value.mean - min;
     }
     if (max !== undefined) {
-        if (stdevMax === undefined) {
-            stdevMax = Math.floor((max - value.mean) / 3);
+        if (maxdevMax === undefined) {
+            maxdevMax = max - value.mean;
         } else {
-            stdevMax = Math.min(stdevMax, Math.floor((max - value.mean) / 3));
+            maxdevMax = Math.min(maxdevMax, max - value.mean);
         }
     }
 
@@ -68,12 +68,9 @@ export function RandomizedStatInputRow({ label, value, min, max, onChange }: Ran
         <div className="input-row">
             <span style={{marginRight: "auto"}}>{label}</span>
             <div>
-                <NumberInputField title= "Среднее значение нормального распределения"
-                            value={value.mean} min={min} max={max} step="any" onChange={setMean} />
+                <NumberInputField title= "Среднее значение" value={value.mean} min={min} max={max} step="any" onChange={setMean} />
                 <span> ± </span>
-                <NumberInputField title={"Стандартное отклонение нормального распределения\nС вероятностью ~68% значение будет на расстоянии не более 1-го стандартного отклонения от среднего\n" +
-                            "С вероятностью ~27% - между 1-м и 2-мя стандартными отклонениями\nС вероятностью ~5% - между 2-мя и 3-мя стандартными отклонениями (предел)"}
-                            value={value.stdev} min={0} max={stdevMax} step="any" onChange={setStdev} />
+                <NumberInputField title="Максимальное отклонение" value={value.maxdev} min={0} max={maxdevMax} step="any" onChange={setMaxdev} />
             </div>
         </div>
     );

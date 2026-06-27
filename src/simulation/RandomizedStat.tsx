@@ -2,17 +2,17 @@ import { randomNormalDist } from "../Utils";
 
 export default class RandomizedStat {
     readonly mean: number;
-    readonly stdev: number;
+    readonly maxdev: number;
 
-    constructor(mean: number, stdev: number) {
+    constructor(mean: number, maxdev: number) {
         this.mean = mean;
-        this.stdev = stdev;
+        this.maxdev = maxdev;
     }
 
-    get min() { return this.mean - this.stdev * 3; }
-    get max() { return this.mean + this.stdev * 3; }
+    get min() { return this.mean - this.maxdev; }
+    get max() { return this.mean + this.maxdev; }
 
     random(): number {
-        return randomNormalDist(this.mean, this.stdev, 3);
+        return randomNormalDist(this.mean, this.maxdev / 3, 3);
     }
 }

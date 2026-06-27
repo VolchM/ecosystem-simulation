@@ -4,10 +4,29 @@
     justify-content: space-between;
     align-items: center;
     text-wrap: nowrap;
+    gap: 8px;
 }
 
-.input-field {
+.number-input-field {
     font-size: 1rem;
     width: 53px;
+    color-scheme: dark;
+}
+
+.text-input-field {
+    font-size: 1.1rem;
+    color-scheme: dark;
+    text-align: center;
+    min-width: 100px;
+    max-width: 250px;
+    field-sizing: content;
+}
+
+.select-input {
+    font-size: 1rem;
+    color-scheme: dark;
+}
+
+.color-picker {
     color-scheme: dark;
 }

@@ -1,7 +1,7 @@
 import RandomizedStat from "../simulation/RandomizedStat";
 import "./InputFields.css";
 
-export type InputFieldProps = {
+export type NumberInputFieldProps = {
     value: number,
     min?: number,
     max?: number,
@@ -10,15 +10,15 @@ export type InputFieldProps = {
     onChange: (value: number) => void
 }
 
-export function InputField({ value, min, max, title, step = "any", onChange }: InputFieldProps): React.JSX.Element {
+export function NumberInputField({ value, min, max, title, step = "any", onChange }: NumberInputFieldProps): React.JSX.Element {
     function handleChange(e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) {
         e.target.reportValidity();
         onChange(e.target.valueAsNumber);
     }
-    return <input className="input-field" type="number" title={title} value={isNaN(value) ? "" : value} min={min} max={max} step={step} onChange={handleChange} required />;
+    return <input className="number-input-field" type="number" title={title} value={isNaN(value) ? "" : value} min={min} max={max} step={step} onChange={handleChange} required />;
 }
 
-export type NumberInputProps = {
+export type NumberInputRowProps = {
     label: string,
     value: number,
     min?: number,
@@ -27,16 +27,16 @@ export type NumberInputProps = {
     onChange: (value: number) => void;
 }
 
-export function NumberInput({ label, value, min, max, step = "any", onChange }: NumberInputProps): React.JSX.Element {
+export function NumberInputRow({ label, value, min, max, step = "any", onChange }: NumberInputRowProps): React.JSX.Element {
     return (
         <div className="input-row">
             <span>{label}</span>
-            <InputField value={value} min={min} max={max} step={step} onChange={onChange} />
+            <NumberInputField value={value} min={min} max={max} step={step} onChange={onChange} />
         </div>
     );
 }
 
-export type RandomizedStatInputProps = {
+export type RandomizedStatInputRowProps = {
     label: string,
     value: RandomizedStat,
     min?: number,
@@ -44,7 +44,7 @@ export type RandomizedStatInputProps = {
     onChange: (value: RandomizedStat) => void;
 }
 
-export function RandomizedStatInput({ label, value, min, max, onChange }: RandomizedStatInputProps): React.JSX.Element {
+export function RandomizedStatInputRow({ label, value, min, max, onChange }: RandomizedStatInputRowProps): React.JSX.Element {
     function setMean(mean: number) {
         onChange(new RandomizedStat(mean, value.stdev));
     }
@@ -68,13 +68,71 @@ export function RandomizedStatInput({ label, value, min, max, onChange }: Random
         <div className="input-row">
             <span style={{marginRight: "auto"}}>{label}</span>
             <div>
-                <InputField title= "Среднее значение нормального распределения"
+                <NumberInputField title= "Среднее значение нормального распределения"
                             value={value.mean} min={min} max={max} step="any" onChange={setMean} />
                 <span> ± </span>
-                <InputField title={"Стандартное отклонение нормального распределения\nС вероятностью ~68% значение будет на расстоянии не более 1-го стандартного отклонения от среднего\n" +
+                <NumberInputField title={"Стандартное отклонение нормального распределения\nС вероятностью ~68% значение будет на расстоянии не более 1-го стандартного отклонения от среднего\n" +
                             "С вероятностью ~27% - между 1-м и 2-мя стандартными отклонениями\nС вероятностью ~5% - между 2-мя и 3-мя стандартными отклонениями (предел)"}
                             value={value.stdev} min={0} max={stdevMax} step="any" onChange={setStdev} />
             </div>
+        </div>
+    );
+}
+
+export type TextInputFieldProps = {
+    value: string,
+    title?: string,
+    maxLength?: number,
+    onChange: (value: string) => void
+}
+
+export function TextInputField({ value, title, maxLength, onChange }: TextInputFieldProps): React.JSX.Element {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) {
+        e.target.reportValidity();
+        onChange(e.target.value);
+    }
+    return <input className="text-input-field" type="text" value={value} title={title} maxLength={maxLength} onChange={handleChange} required />;
+}
+
+export type SelectInputRowProps = {
+    label: string,
+    options: string[],
+    value: string[],
+    onChange: (value: string[]) => void
+}
+
+export function SelectInputRow({ label, options, value, onChange }: SelectInputRowProps): React.JSX.Element {
+    function handleChange(e: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>) {
+        e.target.reportValidity();
+        onChange(Array.from(e.target.selectedOptions, option => option.value));
+    }
+    return (
+        <div className="input-row">
+            <span>{label}</span>
+            <select className="select-input" value={value} onChange={handleChange} size={1} multiple>
+                {options.map(option => 
+                    <option>{option}</option>
+                )}
+            </select>
+        </div>
+    );
+}
+
+export type ColorPickerRowProps = {
+    label: string,
+    value: string,
+    onChange: (value: string) => void
+}
+
+export function ColorPickerRow({ label, value, onChange }: ColorPickerRowProps): React.JSX.Element {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) {
+        e.target.reportValidity();
+        onChange(e.target.value);
+    }
+    return (
+        <div className="input-row">
+            <span>{label}</span>
+            <input className="color-picker" type="color" value={value} onChange={handleChange} required />
         </div>
     );
 }

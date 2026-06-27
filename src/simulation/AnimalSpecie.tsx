@@ -1,10 +1,6 @@
 import { clamp, randomNormalDist } from "../Utils";
 import RandomizedStat from "./RandomizedStat";
 
-export enum AnimalDiet {
-    Herbivore, Carnivore
-}
-
 export enum Sex {
     Male, Female
 }
@@ -15,8 +11,7 @@ export type AnimalStats = Record<AnimalStatName, number>;
 
 export type AnimalSpecieArgs = { 
     name: string,
-    diet: AnimalDiet,
-    eats?: string[],
+    eats: string[],
     startingCount: number,
     inheritedStats: InheritedStats,
     satietyLoss: number,
@@ -30,7 +25,6 @@ export type AnimalSpecieArgs = {
 
 export default class AnimalSpecie {
     readonly name: string;
-    readonly diet: AnimalDiet;
     readonly eats: string[];
     readonly startingCount: number;
 
@@ -46,8 +40,7 @@ export default class AnimalSpecie {
 
     constructor(args: AnimalSpecieArgs) {
         this.name = args.name;
-        this.diet = args.diet;
-        this.eats = args.eats ?? [];
+        this.eats = args.eats;
         this.startingCount = args.startingCount;
         this.inheritedStats = args.inheritedStats;
         this.satietyLoss = args.satietyLoss;
@@ -81,5 +74,9 @@ export default class AnimalSpecie {
                 }
             })
         ) as AnimalStats;
+    }
+
+    isCarnivore(): boolean {
+        return this.eats.filter(x => x !== "Растение").length > 0;
     }
 }

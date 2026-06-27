@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import SimulationField from "../simulation/SimulationField.tsx";
 import SimulationObject from "../simulation/SimulationObject.tsx";
-import AnimalSpecie, { AnimalDiet, type AnimalSpecieArgs } from "../simulation/AnimalSpecie.tsx";
+import AnimalSpecie, { type AnimalSpecieArgs } from "../simulation/AnimalSpecie.tsx";
 import RandomizedStat from "../simulation/RandomizedStat.tsx";
 import PlantParams, { type PlantParamsArgs } from "../simulation/PlantParams.tsx";
 import SimulationFieldView from "./SimulationFieldView.tsx";
@@ -33,7 +33,7 @@ export const defaultSimulationParams: SimulationParams = {
     species: [
         {
             name: "Травоядное",
-            diet: AnimalDiet.Herbivore,
+            eats: ["Растение"],
             startingCount: 180,
             inheritedStats: {
                 maxSpeed: new RandomizedStat(50, 2),
@@ -53,7 +53,6 @@ export const defaultSimulationParams: SimulationParams = {
         },
         {
             name: "Плотоядное",
-            diet: AnimalDiet.Carnivore,
             eats: ["Травоядное"],
             startingCount: 25,
             inheritedStats: {

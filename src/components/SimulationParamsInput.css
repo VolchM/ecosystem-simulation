@@ -2,6 +2,7 @@
     min-width: 350px;
     overflow-y: auto;
     max-height: 98vh;
+    scrollbar-width: thin;
 }
 
 .simulation-params .note {
@@ -24,7 +25,7 @@
     margin-top: 5px;
     text-align: center;
 
-    svg {
+    svg, .delete-button {
         vertical-align: middle;
     }
 }
@@ -33,4 +34,41 @@
     font-size: 1rem;
     color-scheme: dark;
     margin: 10px;
+}
+
+.delete-button {
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: none;
+    border-radius: 35%;
+    margin: 5px;
+    background-color: #c09292;
+}
+
+.delete-button:hover {
+    background-color: #be7676;
+}
+
+.delete-button:active {
+    background-color: #bd5757;
+}
+
+.add-button {
+    display: block;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: none;
+    border-radius: 35%;
+    margin: 5px auto;
+    background-color: #cfe2c7;
+}
+
+.add-button:hover {
+    background-color: #bde0ae;
+}
+
+.add-button:active {
+    background-color: #a5db8d;
 }

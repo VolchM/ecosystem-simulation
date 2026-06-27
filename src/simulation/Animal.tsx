@@ -1,4 +1,4 @@
-import AnimalSpecie, { AnimalDiet, Sex, type AnimalStats } from "./AnimalSpecie.tsx";
+import AnimalSpecie, { Sex, type AnimalStats } from "./AnimalSpecie.tsx";
 import Plant from "./Plant.tsx";
 import SimulationField from "./SimulationField.tsx";
 import SimulationObject from "./SimulationObject.tsx"
@@ -120,7 +120,7 @@ export default class Animal extends SimulationObject {
             return;
         }
 
-        if (this._specie.diet == AnimalDiet.Herbivore) {
+        if (this._specie.isEating("Растение")) {
             const closestPlant: Plant | null = this.closestInVisionRange(this.field.plants.values());
             if (closestPlant !== null && (this._stats.maxSatiety - this._satiety >= 0.7 * closestPlant.satietyValue)) {
                 if (this.pos.distanceTo(closestPlant.pos) <= Math.max(this.radius, closestPlant.radius)) {
@@ -134,7 +134,8 @@ export default class Animal extends SimulationObject {
                 }
                 return;
             }
-        } else if (this._specie.diet == AnimalDiet.Carnivore) {
+        }
+        if (this._specie.isCarnivore()) {
             const closestPrey: Animal | null = this.closestInVisionRange(
                 this.field.animals.values(),
                 animal => this._specie.isEating(animal.specie.name)
@@ -152,7 +153,7 @@ export default class Animal extends SimulationObject {
                 return;
             }
         }
-
+        
         if (this._stamina <= 0.3 * this._stats.maxStamina) {
             // Остановиться отдохнуть при малой выносливости
             this._speedMult = 0;
